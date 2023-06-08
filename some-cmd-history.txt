@@ -1,0 +1,201 @@
+minikube start --driver=docker [ Linux ]
+
+minikube ip
+
+ssh hyperv@${ip} - windows
+ssh docker@${ip} - linux
+
+Minikube node user credentials:
+username: docker
+Password: tcuser
+
+-> now, i'm inside kubernetes node
+
+docker ps
+
+Note: If you try to use kubectl inside the k8s node, it'll not work because it is an external tool(is used to manage kubernetes cluster).
+
+exit
+
+kubectl cluster-info
+
+kubectl get pods
+
+ssh docker@${ip}
+
+kubectl get nodes
+
+kubectl get pods
+
+kubectl get namespaces
+
+kubectl get pods --namespace=kube-system
+
+kubectl run nginx --image=nginx 
+
+kubectl get pods
+
+kubectl describe pod nginx
+
+minikube ip
+
+ssh docker@${ip}
+
+docker ps | grep nginx
+
+docker exec -it ${nginxContainerId} sh
+
+#hostname
+
+#hostname -i
+
+curl ${ipGeneratedAbove}
+
+exit
+
+exit
+
+kubectl get pods -o wide
+
+curl ${nginxContainerId}
+
+* If you try to access the sv from the browser, you'll can't, because its only allow to acces from inside the cluster
+
+kubectl delete pod nginx
+
+kubectl get pods
+
+alias k="kubectl" - Linux or Bash
+
+--------- Deployment ---------
+
+* Use Deployments to create multiple pods inside a cluster, which is more convinient to scalability
+
+k create deployment nginx-deployment --image=nginx
+
+k get deployments
+
+k get pods
+
+k describe deployment nginx-deployment
+
+k get pods
+
+k describe pod ${nameOfThePodAbove}
+
+k scale deployment nginx-deployment --replicas=5
+
+k get pods
+
+k get pods -o wide
+
+k scale deployment nginx-deployment --replicas=3
+
+k get pods -o wide
+
+* our local computer is external regarding to k8s cluster
+
+curl ${oneOfTheIdsListed} - will not work
+
+ctrl + c
+
+minikube ip
+
+ssh docker@${ip}
+
+pass: tcuser
+
+curl ${oneOfTheIdsListed} *now any pods works because we're inside the node, and I'm able to connect to pods which are running on this specific node, using the ip adress of those pods
+
+exit
+
+k get pods -o wide
+
+--------- Services ---------
+
+* To connect to specific deployment using specific Ip adress
+
+k get deployments
+k get deploy
+
+k expose deployment nginx-deployment --port=8080 --target-port=80
+
+k get services
+
+k get svc
+
+k describe svc nginx-deployment
+
+curl ${clusterIp}:8080
+
+ssh docker@${ip}
+tcuser
+
+OR
+
+kubectl exec -it ${podName} -- //bin/sh
+
+curl ${clusterIp}:8080
+
+* cluster ip is just a single ip which was created as a service for a particular deployment, and you could utilize just single ip in order to connect to any of the pods
+
+* cluster ip is only available in a k8s cluster
+
+exit
+
+k get svc
+
+k delete deployment nginx-deployment
+
+k delete svc nginx-deployment
+
+k get deploy
+
+k get svc
+
+* here I set a node application, created a dockerfile. I logged in docker and pushed the image to docker hub.
+
+k get deploy
+
+k get svc
+
+k create deployment k8s-web-hello --image=yantutilabs/k8s-web-hello
+
+k get pods
+
+k expose deployment ${deployName} --port=3000
+
+k get svc
+
+minikube service ${serviceName} --url
+
+minikube service ${serviceName}
+
+* here, I updated the k8s-web-hello and created pushed to docker hub as a new version
+
+[VSCODE]
+
+docker build . -t yantutilabs/k8s-web-hello:2.0.0
+
+docker push yantutilabs/k8s-web-hello:2.0.0
+
+[PWRSHELL]
+
+
+kubectl set image deployment k8s-web-hello k8s-web-hello=yantutilabs/k8s-web-hello:2.0.0
+
+kubectl rollout status deployment k8s-web-hello
+
+kubectl get pods
+
+kubectl get svc
+
+minikube service k8s-web-hello
+
+kubectl set image deployment k8s-web-hello k8s-web-hello=yantutilabs/k8s-web-hello
+
+kubectl rollout status deployment k8s-web-hello
+
+minikube dashboard
+
+kubectl delete all --all
